@@ -15,6 +15,9 @@ module.exports = {
         accent: '#B20000',
         neutral: '#FCF5E5',
       },
+      transitionProperty: {
+        height: 'height',
+      },
     },
   },
   plugins: [],
