@@ -2,6 +2,7 @@ import { IProduct } from '@/types/products';
 import ProductList from '@/features/catalog/ProductList';
 import Container from '@/layouts/Container';
 import { NextPageContext } from 'next';
+import agent from '@/api/agent';
 
 interface Props {
   products: IProduct[];
@@ -15,10 +16,10 @@ export default function Catalog({ products }: Props) {
   );
 }
 
-export async function getServerSideProps(context: NextPageContext) {
+export async function getServerSideProps() {
   try {
-    const response = await fetch('http://localhost:5101/api/Products');
-    const products = await response.json();
+    const products = await agent.catalog.list();
+
     return {
       props: { products },
     };

@@ -13,7 +13,7 @@ export default function CurrentProduct({ product }: Props) {
           <Image src={product.imageUrl} alt={product.name} width={200} height={100} />
         </div>
         <div className="font-semibold">
-          <p className="text-accent text-xl">&#8369;{product.price.toFixed(2)}</p>
+          <p className="text-accent text-xl">&#8369;{product.price?.toFixed(2)}</p>
           <h2 className="text-md">{product.name}</h2>
         </div>
         <div>

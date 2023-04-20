@@ -14,7 +14,7 @@ export default function HeaderNav() {
   };
 
   return (
-    <nav className=" bg-primary py-4 px-5 flex flex-col items-center justify-between bg-gradient-to-tr shadow-md">
+    <nav className="bg-primary py-4 px-5 flex flex-col items-center justify-between bg-gradient-to-tr shadow-md">
       <div className="flex justify-between w-full">
         <h1 className="text-2xl text-neutral">ReStore</h1>
         <button onClick={handleNav} className="text-neutral text-3xl">

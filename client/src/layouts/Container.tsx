@@ -7,7 +7,7 @@ interface Props {
 
 export default function Container({ children }: Props) {
   return (
-    <div>
+    <div className="h-screen">
       <HeaderNav />
       {children}
     </div>

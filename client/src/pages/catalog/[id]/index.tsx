@@ -2,6 +2,8 @@ import { IProduct } from '@/types/products';
 import Container from '@/layouts/Container';
 import { NextPageContext } from 'next';
 import CurrentProduct from '@/features/catalog/CurrentProduct';
+import agent from '@/api/agent';
+import { error } from 'console';
 
 interface Props {
   product: IProduct;
@@ -16,15 +18,19 @@ export default function Product({ product }: Props) {
 }
 
 export async function getServerSideProps(context: NextPageContext) {
-  try {
-    const { query } = context;
+  const { id } = context.query;
 
-    const response = await fetch(`http://localhost:5101/api/Products/${query.id}`);
-    const product = await response.json();
+  if (!id) throw new Error('Invalid Id');
+
+  const product = await agent.catalog.details(+id).catch((error) => console.log(error));
+
+  if (!product) {
     return {
-      props: { product },
+      notFound: true,
     };
-  } catch (err) {
-    if (err instanceof Error) throw new Error(err.message);
   }
+
+  return {
+    props: { product },
+  };
 }
