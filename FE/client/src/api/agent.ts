@@ -24,6 +24,13 @@ const catalog = {
   details: (id: number) => requests.get(`products/${id}`),
 };
 
+const basket = {
+  get: () => requests.get('basket'),
+  addItem: (productId: number, quantity = 1) => requests.post(`basket?productId=${productId}&quantity=${quantity}`, {}),
+  removeItem: (productId: number, quantity = 1) =>
+    requests.delete(`basket?productId=${productId}&quantity=${quantity}`),
+};
+
 const errors = {
   get400Error: () => requests.get('buggy/not-found'),
   getBadRequest: () => requests.get('buggy/bad-request'),
@@ -35,6 +42,7 @@ const errors = {
 const agent = {
   catalog,
   errors,
+  basket,
 };
 
 export default agent;

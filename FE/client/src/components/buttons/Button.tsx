@@ -1,4 +1,5 @@
 import { MouseEventHandler, ReactNode } from 'react';
+import MoonLoader from 'react-spinners/MoonLoader';
 import classnames from 'classnames';
 
 const baseStyle =
@@ -8,14 +9,15 @@ interface Props {
   children?: ReactNode | ReactNode[];
   onClick?: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
+  loading?: boolean;
   className?: string;
 }
 
-export default function Button({ children, onClick, disabled, className }: Props) {
+export default function Button({ children, onClick, disabled, className, loading }: Props) {
   const combinedClassNames = classnames(baseStyle, className);
   return (
     <button onClick={onClick} disabled={disabled} className={combinedClassNames}>
-      {children}
+      {loading ? <MoonLoader size={20} color="#FCF5E5" /> : children}
     </button>
   );
 }

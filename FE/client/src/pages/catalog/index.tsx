@@ -17,7 +17,7 @@ export default function Catalog({ products }: Props) {
 }
 
 export async function getServerSideProps() {
-  const products = await agent.catalog.list().catch((error) => error);
+  const products = await agent.catalog.list().catch((error) => console.log(error));
 
   if (!products)
     return {

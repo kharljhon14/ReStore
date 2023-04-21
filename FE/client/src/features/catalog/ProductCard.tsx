@@ -1,14 +1,29 @@
+import agent from '@/api/agent';
 import Button from '@/components/buttons/Button';
+import { useAddItemMutation, useGetBasketQuery } from '@/redux/services/bakset';
 import { IProduct } from '@/types/products';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { FiShoppingCart } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 
 interface Props {
   product: IProduct;
 }
 
 export default function ProductCard({ product }: Props) {
+  const [addProduct, { isSuccess, isError, isLoading }] = useAddItemMutation();
+
+  const handleAddItem = () => {
+    addProduct({ productId: product.id });
+  };
+
+  useEffect(() => {
+    if (isSuccess) toast.success('Added to cart!');
+    if (isError) toast.error('Something went wrong!');
+  }, [isSuccess, isError]);
+
   return (
     <div className="flex flex-col items-center justify-between h-[350px] border py-5 px-2 rounded-md shadow-md space-y-5">
       <Link className="w-full" href={`/catalog/${product.id}`}>
@@ -26,7 +41,7 @@ export default function ProductCard({ product }: Props) {
           </div>
         </div>
       </Link>
-      <Button>
+      <Button loading={isLoading} disabled={isLoading} onClick={handleAddItem}>
         <FiShoppingCart size={20} />
         <p>Add to cart</p>
       </Button>

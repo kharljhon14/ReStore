@@ -7,4 +7,6 @@ export interface IProduct {
   type: string;
   brand: string;
   quantityInStock: number;
+  quantity: number;
+  productId: number;
 }
