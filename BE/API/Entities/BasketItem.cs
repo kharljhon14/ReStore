@@ -13,7 +13,7 @@ namespace API.Entities
         public int ProductId { get; set; }
 
         public Product Product { get; set; }
-        public int basketId { get; set; }
+        public int BasketId { get; set; }
         public Basket Basket { get; set; }
     }
 }

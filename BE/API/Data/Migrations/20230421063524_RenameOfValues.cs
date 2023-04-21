@@ -5,7 +5,7 @@
 namespace API.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedBasketEntity : Migration
+    public partial class RenameOfValues : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +16,7 @@ namespace API.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    userId = table.Column<string>(type: "TEXT", nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -31,14 +31,14 @@ namespace API.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
                     ProductId = table.Column<int>(type: "INTEGER", nullable: false),
-                    basketId = table.Column<int>(type: "INTEGER", nullable: false)
+                    BasketId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BasketItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BasketItems_Baskets_basketId",
-                        column: x => x.basketId,
+                        name: "FK_BasketItems_Baskets_BasketId",
+                        column: x => x.BasketId,
                         principalTable: "Baskets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -51,9 +51,9 @@ namespace API.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BasketItems_basketId",
+                name: "IX_BasketItems_BasketId",
                 table: "BasketItems",
-                column: "basketId");
+                column: "BasketId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BasketItems_ProductId",
