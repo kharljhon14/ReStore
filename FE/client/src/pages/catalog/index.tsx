@@ -2,6 +2,7 @@ import agent from '@/api/agent';
 import ProductList from '@/features/catalog/ProductList';
 import Container from '@/layouts/Container';
 import { IProduct } from '@/types/products';
+import { error } from 'console';
 
 interface Props {
   products: IProduct[];
@@ -16,7 +17,7 @@ export default function Catalog({ products }: Props) {
 }
 
 export async function getServerSideProps() {
-  const products = await agent.catalog.list();
+  const products = await agent.catalog.list().catch((error) => error);
 
   if (!products)
     return {
