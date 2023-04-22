@@ -1,6 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import baseApi from './services/base';
-import store from '.';
 
 const mainReducer = combineReducers({});
 
