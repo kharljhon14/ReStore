@@ -29,4 +29,4 @@ const basketApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetBasketQuery, useAddItemMutation, useRemoveItemMutation } = basketApi;
+export const { useGetBasketQuery, useLazyGetBasketQuery, useAddItemMutation, useRemoveItemMutation } = basketApi;

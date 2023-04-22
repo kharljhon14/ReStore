@@ -6,11 +6,20 @@ import { BsBook, BsInfoCircle } from 'react-icons/bs';
 import { BiLogIn } from 'react-icons/bi';
 import { HiOutlineMail } from 'react-icons/hi';
 import { FiShoppingCart } from 'react-icons/fi';
-import { useGetBasketQuery } from '@/redux/services/bakset';
+import { useLazyGetBasketQuery } from '@/redux/services/bakset';
 import MoonLoader from 'react-spinners/MoonLoader';
+import { getCookie } from '@/utils/cookies';
 
 export default function HeaderNav() {
-  const { data: basket, isLoading } = useGetBasketQuery();
+  const [getBasket, { data: basket, isSuccess, isLoading }] = useLazyGetBasketQuery();
+
+  useEffect(() => {
+    const user = getCookie('userId');
+
+    if (!user) return;
+
+    getBasket();
+  }, [getBasket, basket]);
 
   const [open, setOpen] = useState(false);
 
@@ -25,7 +34,7 @@ export default function HeaderNav() {
       ) : (
         <span className="absolute -top-2 -right-4 text-sm font-normal">
           <span className="bg-accent w-6 h-6 rounded-full flex items-center justify-center">
-            {basket?.items.length}
+            {isSuccess ? basket?.items.length : '0'}
           </span>
         </span>
       )}
