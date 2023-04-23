@@ -1,7 +1,10 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import baseApi from './services/base';
+import productFilter from './slices/productFilter';
 
-const mainReducer = combineReducers({});
+const mainReducer = combineReducers({
+  productFilter,
+});
 
 const apiReducers = {
   [baseApi.reducerPath]: baseApi.reducer,
