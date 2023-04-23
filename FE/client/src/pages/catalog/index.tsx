@@ -6,12 +6,15 @@ import { IProductFilters } from '@/types/productFilters';
 import { IProduct } from '@/types/products';
 import Button from '@/components/buttons/Button';
 import { MdFilterAlt } from 'react-icons/md';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGetAllProductsQuery, useLazyGetAllProductsQuery } from '@/redux/services/products';
 import { set } from '@/redux/actions';
 import { IFilterParams } from '@/types/filterParams';
-import { useAppSelector } from '@/hooks/redux';
-import { parseFilter } from '@/utils/parseProductFilter';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+
+import { toast } from 'react-toastify';
+import Loading from '@/components/common/Loading';
+import Input from '@/components/inputs/Input';
 
 interface Props {
   products: IProduct[];
@@ -24,7 +27,9 @@ export default function Catalog({ products, filters }: Props) {
   const [modalOpen, setModalOpen] = useState(false);
   const [getFilteredProduct, { data, isLoading, isSuccess, isError }] = useLazyGetAllProductsQuery();
 
+  const dispatch = useAppDispatch();
   const productFilter = useAppSelector((state) => state.main.productFilter);
+  const [searchValue, setSearchValue] = useState(productFilter.SearchTerm ?? '');
 
   useEffect(() => {
     getFilteredProduct(productFilter);
@@ -33,21 +38,47 @@ export default function Catalog({ products, filters }: Props) {
   useEffect(() => {
     if (isSuccess && data) setProductData(data);
 
-    if (isError) console.log('ERROR');
+    if (isError) toast.error('Something went worng!');
   }, [isSuccess, isError, data]);
   const handleModal = () => {
     setModalOpen((prev) => !prev);
   };
 
+  const handleKeyPress = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+    if (evt.key === 'Enter') {
+      evt.preventDefault();
+
+      const filters: IFilterParams = {
+        ...productFilter,
+        SearchTerm: searchValue,
+      };
+
+      dispatch(set(filters));
+      evt.currentTarget.blur();
+    }
+  };
+
   return (
     <Container>
-      <div className="p-3 flex justify-end">
+      <div className="p-3 flex items-center justify-around">
+        <form>
+          <Input
+            className="border py-3 px-4 rounded-md"
+            name="SearchParam"
+            id=""
+            type="input"
+            placeholder="Search"
+            onKeyDown={handleKeyPress}
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+        </form>
         <Button onClick={handleModal} className="bg-tertiary">
           <MdFilterAlt />
           <span>Filter</span>
         </Button>
       </div>
-      <ProductList products={productData} />
+      {isLoading ? <Loading /> : <ProductList products={productData} />}
       {modalOpen && <FilterModal handleModal={handleModal} filters={filters} />}
     </Container>
   );

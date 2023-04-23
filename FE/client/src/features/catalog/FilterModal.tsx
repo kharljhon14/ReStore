@@ -5,7 +5,7 @@ import { IProductFilters } from '@/types/productFilters';
 import React from 'react';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 
-import { useAppDispatch } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { set } from '@/redux/actions';
 
 interface Props {
@@ -15,12 +15,12 @@ interface Props {
 
 export default function FilterModal({ filters, handleModal }: Props) {
   const dispatch = useAppDispatch();
+  const { Brands, OrderBy, Types, SearchTerm } = useAppSelector((state) => state.main.productFilter);
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
     const formData = new FormData(evt.currentTarget);
-
     const sort = formData.get('OrderBy') as string;
     const brands = formData.getAll('Brands') as string[];
     const types = formData.getAll('Types') as string[];
@@ -29,6 +29,7 @@ export default function FilterModal({ filters, handleModal }: Props) {
       OrderBy: sort,
       Brands: brands,
       Types: types,
+      SearchTerm: SearchTerm,
     };
 
     dispatch(set(filters));
@@ -44,22 +45,59 @@ export default function FilterModal({ filters, handleModal }: Props) {
         <form onSubmit={handleSubmit}>
           <div className="space-y-1">
             <h1 className="text-xl font-semibold">Sort</h1>
-            <Input name="OrderBy" id="alaphabetical" type="radio" label="Alphabetical" value="" />
-            <Input name="OrderBy" id="price" type="radio" label="Price - High to low" value="price" />
-            <Input name="OrderBy" id="priceDesc" type="radio" label="Price - Low to hig" value="priceDesc" />
+            <Input
+              name="OrderBy"
+              id="alaphabetical"
+              type="radio"
+              label="Alphabetical"
+              value=""
+              defaultChecked={OrderBy === '' || OrderBy === undefined}
+            />
+            <Input
+              name="OrderBy"
+              id="price"
+              type="radio"
+              label="Price - High to low"
+              value="price"
+              defaultChecked={OrderBy === 'price'}
+            />
+            <Input
+              name="OrderBy"
+              id="priceDesc"
+              type="radio"
+              label="Price - Low to high"
+              value="priceDesc"
+              defaultChecked={OrderBy === 'priceDesc'}
+            />
           </div>
           <div className="bg-primary w-full h-[1px] my-3"></div>
           <div className="space-y-1">
             <h1 className="text-xl font-semibold">Brands</h1>
             {filters.brands.map((brand) => (
-              <Input key={brand} name="Brands" id={brand} type="checkbox" label={brand} value={brand} />
+              <Input
+                key={brand}
+                name="Brands"
+                id={brand}
+                type="checkbox"
+                label={brand}
+                value={brand}
+                defaultChecked={Brands?.includes(brand)}
+              />
             ))}
           </div>
           <div className="bg-primary w-full h-[1px] my-3"></div>
           <div className="space-y-1">
             <h1 className="text-xl font-semibold">Types</h1>
             {filters.types.map((type) => (
-              <Input key={type} name="Types" id={type} type="checkbox" label={type} value={type} />
+              <Input
+                key={type}
+                name="Types"
+                id={type}
+                type="checkbox"
+                label={type}
+                value={type}
+                defaultChecked={Types?.includes(type)}
+              />
             ))}
           </div>
           <Button className="float-right">Filter</Button>
