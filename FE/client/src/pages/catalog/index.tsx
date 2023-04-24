@@ -15,6 +15,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { toast } from 'react-toastify';
 import Loading from '@/components/common/Loading';
 import Input from '@/components/inputs/Input';
+import CatalogSearch from '@/features/catalog/CatalogSearch';
 
 interface Props {
   products: IProduct[];
@@ -27,9 +28,7 @@ export default function Catalog({ products, filters }: Props) {
   const [modalOpen, setModalOpen] = useState(false);
   const [getFilteredProduct, { data, isLoading, isSuccess, isError }] = useLazyGetAllProductsQuery();
 
-  const dispatch = useAppDispatch();
   const productFilter = useAppSelector((state) => state.main.productFilter);
-  const [searchValue, setSearchValue] = useState(productFilter.SearchTerm ?? '');
 
   useEffect(() => {
     getFilteredProduct(productFilter);
@@ -40,39 +39,15 @@ export default function Catalog({ products, filters }: Props) {
 
     if (isError) toast.error('Something went worng!');
   }, [isSuccess, isError, data]);
+
   const handleModal = () => {
     setModalOpen((prev) => !prev);
-  };
-
-  const handleKeyPress = (evt: React.KeyboardEvent<HTMLInputElement>) => {
-    if (evt.key === 'Enter') {
-      evt.preventDefault();
-
-      const filters: IFilterParams = {
-        ...productFilter,
-        SearchTerm: searchValue,
-      };
-
-      dispatch(set(filters));
-      evt.currentTarget.blur();
-    }
   };
 
   return (
     <Container>
       <div className="p-3 flex items-center justify-around">
-        <form>
-          <Input
-            className="border py-3 px-4 rounded-md"
-            name="SearchParam"
-            id=""
-            type="input"
-            placeholder="Search"
-            onKeyDown={handleKeyPress}
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-          />
-        </form>
+        <CatalogSearch />
         <Button onClick={handleModal} className="bg-tertiary">
           <MdFilterAlt />
           <span>Filter</span>
