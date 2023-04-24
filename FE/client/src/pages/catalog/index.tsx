@@ -7,15 +7,14 @@ import { IProduct } from '@/types/products';
 import Button from '@/components/buttons/Button';
 import { MdFilterAlt } from 'react-icons/md';
 import React, { useEffect, useState } from 'react';
-import { useGetAllProductsQuery, useLazyGetAllProductsQuery } from '@/redux/services/products';
-import { set } from '@/redux/actions';
-import { IFilterParams } from '@/types/filterParams';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { useLazyGetAllProductsQuery } from '@/redux/services/products';
+import { useAppSelector } from '@/hooks/redux';
 
 import { toast } from 'react-toastify';
 import Loading from '@/components/common/Loading';
-import Input from '@/components/inputs/Input';
 import CatalogSearch from '@/features/catalog/CatalogSearch';
+import Pagination from '@/components/common/Pagination';
+import { IFilterParams } from '@/types/filterParams';
 
 interface Props {
   products: IProduct[];
@@ -35,13 +34,17 @@ export default function Catalog({ products, filters }: Props) {
   }, [getFilteredProduct, productFilter]);
 
   useEffect(() => {
-    if (isSuccess && data) setProductData(data);
+    if (isSuccess && data) setProductData(data.product);
 
-    if (isError) toast.error('Something went worng!');
+    if (isError) toast.error('Something went wrong!');
   }, [isSuccess, isError, data]);
 
   const handleModal = () => {
     setModalOpen((prev) => !prev);
+  };
+
+  const handlePagination = (filter: IFilterParams) => {
+    getFilteredProduct(filter);
   };
 
   return (
@@ -54,6 +57,7 @@ export default function Catalog({ products, filters }: Props) {
         </Button>
       </div>
       {isLoading ? <Loading /> : <ProductList products={productData} />}
+      {data?.pagination && <Pagination handlePagination={handlePagination} pagination={data.pagination} />}
       {modalOpen && <FilterModal handleModal={handleModal} filters={filters} />}
     </Container>
   );

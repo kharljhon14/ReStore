@@ -4,14 +4,13 @@ import CurrentProduct from '@/features/catalog/CurrentProduct';
 import { useGetProductQuery } from '@/redux/services/products';
 import { useRouter } from 'next/router';
 import Loading from '@/components/common/Loading';
-import { handleError } from '@/utils/error';
 
 export default function Product() {
   const router = useRouter();
   const { id } = router.query;
   const productId = typeof id === 'string' ? id : '';
 
-  const { data: product, isLoading, isError, error } = useGetProductQuery(productId);
+  const { data: product, isLoading, isError } = useGetProductQuery(productId);
 
   if (isLoading) return <Loading />;
 

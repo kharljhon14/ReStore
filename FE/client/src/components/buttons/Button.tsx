@@ -3,7 +3,7 @@ import MoonLoader from 'react-spinners/MoonLoader';
 import classnames from 'classnames';
 
 const baseStyle =
-  'text-secondary font-semibold flex items-center space-x-2 bg-primary justify-center py-3 px-4 uppercase rounded hover:scale-105 duration-300 active:scale-100 focus:duration-75';
+  'text-secondary font-semibold flex items-center space-x-2 bg-primary justify-center py-3 px-4 uppercase rounded hover:scale-105 duration-300 active:scale-100 focus:duration-75 disabled:bg-tertiary disabled:cursor-not-allowed disabled:hover:scale-100';
 
 interface Props {
   children?: ReactNode | ReactNode[];

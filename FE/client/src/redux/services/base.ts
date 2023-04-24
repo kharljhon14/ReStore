@@ -6,6 +6,7 @@ const baseApi = createApi({
   reducerPath: 'storeApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5101/api/', credentials: 'include' }),
   endpoints: () => ({}),
+
   tagTypes: tags,
 });
 
