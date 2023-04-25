@@ -1,6 +1,10 @@
 import Button from '@/components/buttons/Button';
 import Input from '@/components/inputs/Input';
-import { useLoginMutation } from '@/redux/services/auth';
+import { useAppDispatch } from '@/hooks/redux';
+import { setUser } from '@/redux/actions';
+import { useLazyGetCurrentUserQuery, useLoginMutation } from '@/redux/services/auth';
+import { ILoginResponse } from '@/types/auth';
+import { isValidToken } from '@/utils/auth';
 import { useRouter } from 'next/router';
 
 import React, { useEffect, useState } from 'react';
@@ -10,9 +14,12 @@ export default function LoginForm() {
   const router = useRouter();
 
   const [login, loginState] = useLoginMutation();
+  const [getUser, userState] = useLazyGetCurrentUserQuery();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const dispatch = useAppDispatch();
 
   const handleLogin = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -22,10 +29,29 @@ export default function LoginForm() {
   useEffect(() => {
     if (loginState.isSuccess) {
       localStorage.setItem('user', JSON.stringify(loginState.data));
+      dispatch(setUser(loginState.data));
       router.push('/catalog');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loginState.isSuccess, loginState.data]);
+
+  useEffect(() => {
+    const userToken = localStorage.getItem('user');
+
+    if (!userToken) return;
+
+    const token = JSON.parse(userToken);
+
+    if (!isValidToken(token)) return;
+
+    getUser(token.token);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (userState.isSuccess) dispatch(setUser(userState.data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userState.isSuccess, userState.data]);
 
   return (
     <div className="flex flex-col justify-center items-center h-[80vh] space-y-8">

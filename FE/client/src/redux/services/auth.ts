@@ -12,7 +12,15 @@ const authApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getCurrentUser: builder.query<ILoginResponse, string>({
+      query: (token) => ({
+        url: 'account/currentUser',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation, useLazyGetCurrentUserQuery } = authApi;

@@ -1,9 +1,11 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import baseApi from './services/base';
 import productFilter from './slices/productFilter';
+import auth from './slices/auth';
 
 const mainReducer = combineReducers({
   productFilter,
+  auth,
 });
 
 const apiReducers = {
