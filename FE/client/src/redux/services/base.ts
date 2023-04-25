@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const tags = ['Products', 'Basket'];
+const tags = ['Products', 'Basket', 'Auth'];
 
 const baseApi = createApi({
   reducerPath: 'storeApi',

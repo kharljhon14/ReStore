@@ -44,8 +44,12 @@ export default function Catalog({ products, filters }: Props) {
   };
 
   const handlePagination = (filter: IFilterParams) => {
-    getFilteredProduct(filter);
+    getFilteredProduct({ ...productFilter, ...filter });
   };
+
+  useEffect(() => {
+    if (data && isSuccess) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [data, isSuccess]);
 
   return (
     <Container>
@@ -56,6 +60,7 @@ export default function Catalog({ products, filters }: Props) {
           <span>Filter</span>
         </Button>
       </div>
+
       {isLoading ? <Loading /> : <ProductList products={productData} />}
       {data?.pagination && <Pagination handlePagination={handlePagination} pagination={data.pagination} />}
       {modalOpen && <FilterModal handleModal={handleModal} filters={filters} />}

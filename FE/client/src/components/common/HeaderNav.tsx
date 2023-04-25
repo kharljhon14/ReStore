@@ -78,7 +78,7 @@ export default function HeaderNav() {
           </Link>
         </div>
         <div>
-          <Link className="flex items-center space-x-2" href="/">
+          <Link className="flex items-center space-x-2" href="/auth">
             <BiLogIn />
             <span>Login</span>
           </Link>
