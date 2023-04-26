@@ -1,7 +1,17 @@
+import store from '@/redux';
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { url } from 'inspector';
 axios.defaults.baseURL = 'http://localhost:5101/api/';
 
 const responseBody = (res: AxiosResponse) => res.data;
+
+axios.interceptors.request.use((config) => {
+  const token = store.getState().main.auth?.token;
+
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+
+  return config;
+});
 
 axios.interceptors.response.use(
   (response) => {
@@ -11,6 +21,10 @@ axios.interceptors.response.use(
     return Promise.reject(error.response);
   }
 );
+
+const auth = {
+  getUser: () => axios.get('/account/currentUser').then(responseBody),
+};
 
 const requests = {
   get: (url: string) => axios.get(url).then(responseBody),
@@ -44,6 +58,7 @@ const agent = {
   catalog,
   errors,
   basket,
+  auth,
 };
 
 export default agent;

@@ -12,12 +12,15 @@ const authSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<ILoginResponse>) => {
       const { email, token } = action.payload;
-
       Object.assign(state, { email, token });
+    },
+
+    signOutUser: (state) => {
+      state = { email: '', token: '' };
     },
   },
 });
 
-export const { setUser } = authSlice.actions;
+export const { setUser, signOutUser } = authSlice.actions;
 
 export default authSlice.reducer;

@@ -15,6 +15,7 @@ import Loading from '@/components/common/Loading';
 import CatalogSearch from '@/features/catalog/CatalogSearch';
 import Pagination from '@/components/common/Pagination';
 import { IFilterParams } from '@/types/filterParams';
+import withAuth from '@/decorators/withAuth';
 
 interface Props {
   products: IProduct[];

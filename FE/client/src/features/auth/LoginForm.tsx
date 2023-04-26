@@ -32,8 +32,7 @@ export default function LoginForm() {
       dispatch(setUser(loginState.data));
       router.push('/catalog');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loginState.isSuccess, loginState.data]);
+  }, [loginState.isSuccess, loginState.data, dispatch, router]);
 
   useEffect(() => {
     const userToken = localStorage.getItem('user');
@@ -49,9 +48,11 @@ export default function LoginForm() {
   }, []);
 
   useEffect(() => {
-    if (userState.isSuccess) dispatch(setUser(userState.data));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userState.isSuccess, userState.data]);
+    if (userState.isSuccess) {
+      dispatch(setUser(userState.data));
+      router.push('/catalog');
+    }
+  }, [userState.isSuccess, userState.data, dispatch, router]);
 
   return (
     <div className="flex flex-col justify-center items-center h-[80vh] space-y-8">

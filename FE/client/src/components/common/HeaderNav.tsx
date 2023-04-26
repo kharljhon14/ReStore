@@ -9,9 +9,17 @@ import { FiShoppingCart } from 'react-icons/fi';
 import { useLazyGetBasketQuery } from '@/redux/services/bakset';
 import MoonLoader from 'react-spinners/MoonLoader';
 import { getCookie } from '@/utils/cookies';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { signOutUser } from '@/redux/actions';
+import { useRouter } from 'next/router';
 
 export default function HeaderNav() {
   const [getBasket, { data: basket, isSuccess, isLoading }] = useLazyGetBasketQuery();
+
+  const token = useAppSelector((state) => state.main.auth.token);
+  const dispatch = useAppDispatch();
+
+  const { push } = useRouter();
 
   useEffect(() => {
     const user = getCookie('userId');
@@ -42,6 +50,12 @@ export default function HeaderNav() {
       <FiShoppingCart />
     </Link>
   );
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    dispatch(signOutUser());
+    push('/auth');
+  };
 
   return (
     <nav className="bg-primary py-4 px-5 flex flex-col items-center justify-between bg-gradient-to-tr shadow-md absolute left-0 right-0">
@@ -78,10 +92,17 @@ export default function HeaderNav() {
           </Link>
         </div>
         <div>
-          <Link className="flex items-center space-x-2" href="/auth">
-            <BiLogIn />
-            <span>Login</span>
-          </Link>
+          {token !== '' ? (
+            <a className="flex items-center space-x-2 cursor-pointer" onClick={handleLogout}>
+              <BiLogIn />
+              <span>Sign out</span>
+            </a>
+          ) : (
+            <Link className="flex items-center space-x-2" href="/auth">
+              <BiLogIn />
+              <span>Sign in</span>
+            </Link>
+          )}
         </div>
       </div>
     </nav>
