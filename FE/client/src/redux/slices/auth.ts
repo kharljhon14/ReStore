@@ -16,7 +16,7 @@ const authSlice = createSlice({
     },
 
     signOutUser: (state) => {
-      state = { email: '', token: '' };
+      Object.assign(state, { email: '', token: '' });
     },
   },
 });

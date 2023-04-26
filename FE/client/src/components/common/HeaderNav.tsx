@@ -27,7 +27,7 @@ export default function HeaderNav() {
     if (!user) return;
 
     getBasket();
-  }, [getBasket, basket]);
+  }, [getBasket, basket, isSuccess]);
 
   const [open, setOpen] = useState(false);
 
@@ -42,7 +42,7 @@ export default function HeaderNav() {
       ) : (
         <span className="absolute -top-2 -right-4 text-sm font-normal">
           <span className="bg-accent w-6 h-6 rounded-full flex items-center justify-center">
-            {isSuccess ? basket?.items.length : '0'}
+            {basket ? basket?.items.length : '0'}
           </span>
         </span>
       )}
